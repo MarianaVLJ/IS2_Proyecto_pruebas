@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "escu-project"
+version = "0.1.0"
+description = "ESCU Project - Sistema de denuncias anónimas"
+authors = [{ name = "ESCU Team" }]
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+    "Flask>=2.3.0,<3.0.0",
+    "mongoengine>=0.27.0,<1.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "Flask-CORS>=4.0.0,<5.0.0",
+    "Flask-JWT-Extended>=4.7.0,<5.0.0"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4.0,<8.0.0",
+    "pytest-flask>=1.2.0,<2.0.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "backend"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = ["--strict-markers"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.env", "*.md", "*.yml", "*.yaml"]
