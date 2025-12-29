@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import Mock
 
 from backend.app.application.use_cases.create_denuncia import CreateDenunciaUseCase
-from backend.app.domain.models.denuncia import Denuncia
+from app.domain.denuncias.models.denuncia import Denuncia
 
 
 def test_create_denuncia_success():

@@ -2,7 +2,8 @@ import pytest
 from unittest.mock import MagicMock
 from backend.app.domain.services.password_service import PasswordService
 from backend.app.application.use_cases.register_user import RegisterUserUseCase
-from backend.app.domain.models.user import User
+from app.domain.users.models.user import User
+
 
 
 def test_register_user_success(monkeypatch):

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.domain.models.denuncia import Denuncia
+from app.domain.denuncias.models.denuncia import Denuncia
 
 
 class DenunciaRepository(ABC):

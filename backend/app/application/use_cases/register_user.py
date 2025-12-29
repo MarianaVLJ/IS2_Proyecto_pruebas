@@ -1,10 +1,8 @@
-from app.domain.repositories.user_repo import UserRepository
-from app.domain.services.password_service import PasswordService
-from app.domain.models.user import User
-
+from backend.app.domain.users.models.user import User
+from backend.app.domain.services.password_service import PasswordService
 
 class RegisterUserUseCase:
-    def __init__(self, user_repo: UserRepository):
+    def __init__(self, user_repo):
         self.user_repo = user_repo
 
     def execute(self, alias: str, password: str) -> bool:
