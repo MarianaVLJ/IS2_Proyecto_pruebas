@@ -15,7 +15,7 @@ class Denuncia:
         self.categoria = categoria
         self.descripcion = descripcion
         self.lugar = lugar
-        self.fecha_hecho = fecha_hecho or datetime.timezone.utc()
+        self.fecha_hecho = fecha_hecho or datetime.now(timezone.utc)
         self.involucrados = involucrados
         self.evidencia = evidencia
         self.fecha_creacion = datetime.now(timezone.utc)
