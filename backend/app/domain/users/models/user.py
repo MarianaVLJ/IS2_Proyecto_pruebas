@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class User:
-    alias: str
+    alias: str 
     password_hash: str
 
     @staticmethod
