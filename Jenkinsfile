@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Clone') {
             steps {
                 echo 'Clonando repositorio...'
@@ -12,25 +13,17 @@ pipeline {
             steps {
                 sh '''
                 python3 -m venv venv
-                source venv/bin/activate
-                pip install -e .
+                . venv/bin/activate
+                pip install -r backend/requirements.txt
                 '''
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 sh '''
-                source venv/bin/activate
-                pytest || true
-                '''
-            }
-        }
-
-        stage('Docker Mongo') {
-            steps {
-                sh '''
-                docker-compose up -d
+                . venv/bin/activate
+                pytest backend
                 '''
             }
         }
@@ -38,11 +31,20 @@ pipeline {
         stage('Run Backend') {
             steps {
                 sh '''
-                source venv/bin/activate
+                . venv/bin/activate
                 python backend/app.py &
                 sleep 10
                 '''
             }
         }
+
+        stage('OpenAPI Check') {
+            steps {
+                sh '''
+                curl http://localhost:5000/swagger || true
+                '''
+            }
+        }
     }
 }
+
