@@ -14,7 +14,7 @@ pipeline {
                 sh '''
                 python3 -m venv venv
                 . venv/bin/activate
-                pip install -r backend/requirements.txt
+                pip install -e . 
                 '''
             }
         }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                 . venv/bin/activate
-                pytest backend
+                pytest
                 '''
             }
         }
