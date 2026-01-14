@@ -1,18 +1,147 @@
-# ESCU Project - Sistema de Denuncias Anónimas
+================================================================================
+          ESCU PROJECT - SISTEMA DE DENUNCIAS ANÓNIMAS Y APOYO EMOCIONAL
+                    Ingeniería de Software II
 
-## Descripción del Proyecto
 
-ESCU Project es una plataforma web diseñada para facilitar la presentación de **denuncias anónimas** y ofrecer **apoyo emocional** a las personas que han experimentado situaciones difíciles o traumáticas. El sistema está construido con una arquitectura moderna que garantiza la privacidad y confidencialidad de los usuarios.
+RESUMEN EJECUTIVO
+ESCU Project es una solución tecnológica diseñada para abordar la problemática de
+la violencia y el acoso mediante un canal de denuncias 100% anónimo. El enfoque 
+técnico se centra en la seguridad del informante y la integridad de los datos, 
+utilizando estándares modernos de desarrollo de software.
 
-### Objetivos Principales
+--------------------------------------------------------------------------------
+1. EQUIPO DE TRABAJO
+--------------------------------------------------------------------------------
+* Claudia Victoria Agostinelli Córdova
+* Mariana Valery Luis Jimenes
 
-1. **Denuncias Anónimas**: Permitir a los usuarios reportar incidentes de manera completamente anónima, sin necesidad de revelar su identidad personal.
+--------------------------------------------------------------------------------
+2. PROPÓSITO Y VALOR AGREGADO
+--------------------------------------------------------------------------------
+El proyecto busca eliminar las barreras del miedo y la represalia. A diferencia 
+de sistemas tradicionales, ESCU Project garantiza el anonimato desde el diseño 
+(Privacy by Design), separando la identidad del usuario de sus aportes mediante 
+técnicas de hashing y desacoplamiento de servicios.
 
-2. **Apoyo Emocional**: Proporcionar recursos y herramientas para el bienestar emocional de las personas que han vivido experiencias traumáticas.
+Principios Rectores:
+- Privacidad: Cifrado de datos sensibles y anonimización de denuncias.
+- Escalabilidad: Arquitectura lista para crecer mediante microservicios.
+- Resiliencia: Gestión de errores y persistencia NoSQL para alta disponibilidad.
 
-3. **Seguridad y Privacidad**: Garantizar la protección de datos y la confidencialidad de toda la información compartida.
+--------------------------------------------------------------------------------
+3. ARQUITECTURA DEL SISTEMA (CLEAN ARCHITECTURE + DDD)
+--------------------------------------------------------------------------------
+Se ha implementado una arquitectura basada en capas para garantizar la 
+independencia de la lógica de negocio frente a agentes externos (BD, Frameworks).
 
-4. **Accesibilidad**: Crear una plataforma fácil de usar que esté disponible para todos los usuarios.
+[ ESTRUCTURA DE CAPAS ]
+
+  1. DOMAIN (Core): Contiene las entidades (User, Denuncia) y reglas de negocio.
+     Es el corazón del sistema, sin dependencias externas.
+  2. APPLICATION: Orquestadores de casos de uso (Ej. RegistrarDenuncia).
+  3. INFRASTRUCTURE: Implementaciones técnicas (MongoDB, Repositorios, Auth).
+  4. INTERFACES: Puntos de entrada (API REST, Controladores).
+
+[ FLUJO DE DATOS ]
+Input -> Controller -> Use Case -> Repository Implementation -> MongoDB
+
+
+
+[Image of Clean Architecture layers]
+
+
+--------------------------------------------------------------------------------
+4. MODELO DE DOMINIO (DOMAIN DRIVEN DESIGN)
+--------------------------------------------------------------------------------
+El sistema se divide en contextos delimitados (Bounded Contexts):
+
+* Dominio de Identidad (Auth): Gestión de credenciales y seguridad.
+* Dominio de Gestión (Denuncias): Ciclo de vida de la denuncia y seguimiento.
+
+Entidades Críticas:
+- User: Identificado por un alias único (para preservar anonimato real).
+- Denuncia: Contiene metadatos de categoría, descripción y un hash de seguimiento.
+
+--------------------------------------------------------------------------------
+5. MICROSERVICIOS E INFRAESTRUCTURA
+--------------------------------------------------------------------------------
+La solución ha sido descompuesta en servicios autónomos que se comunican vía HTTP:
+
+| Servicio           | Puerto | Responsabilidad                          |
+|--------------------|--------|------------------------------------------|
+| Auth Service       | 5001   | Validación JWT, Registro y Seguridad.    |
+| Denuncia Service   | 5002   | CRUD de denuncias y lógica de categorías.|
+
+Persistencia:
+- Motor: MongoDB (Base de datos NoSQL).
+- Patrón: Repository Pattern para desacoplar la lógica de las consultas.
+- Despliegue de BD: Containerizado mediante Docker para entornos reproducibles.
+
+--------------------------------------------------------------------------------
+6. DOCUMENTACIÓN Y API (OPENAPI / SWAGGER)
+--------------------------------------------------------------------------------
+El sistema es "API-First". Toda la funcionalidad está expuesta y documentada bajo 
+el estándar OpenAPI 3.0.
+
+Endpoints Principales:
+- POST /api/auth/register : Registro de nuevos informantes.
+- POST /api/auth/login    : Generación de tokens de acceso.
+- POST /api/denuncias     : Creación de registros anónimos.
+- GET  /api/denuncias/{id}: Consulta de estado mediante código hash.
+
+Acceso a Docs: http://localhost:5001/api/docs (Auth) | 5002 (Denuncias)
+
+--------------------------------------------------------------------------------
+7. CICLO DE VIDA Y CI/CD (JENKINS)
+--------------------------------------------------------------------------------
+Se implementó un Pipeline de Integración Continua para asegurar la calidad del 
+código en cada entrega:
+
+Pipeline Stages:
+1. Checkout: Descarga del código fuente desde GitHub.
+2. Build: Configuración del entorno virtual y carga de dependencias.
+3. Unit Tests: Ejecución de pruebas con PyTest (cobertura de lógica de dominio).
+4. Static Analysis: Verificación de estilo y potenciales vulnerabilidades.
+5. OpenAPI Check: Validación de la consistencia de los contratos de la API.
+
+--------------------------------------------------------------------------------
+8. GESTIÓN DE PROYECTO
+--------------------------------------------------------------------------------
+El desarrollo se gestionó mediante GitHub Issues, aplicando trazabilidad entre 
+requerimientos y cambios en el código (commits referenciados).
+
+Hitos Logrados (Práctica 7):
+- Implementación de MongoUserRepository (Infraestructura real).
+- Extracción y aislamiento de Microservicios (Auth & Denuncia).
+- Automatización de Pipeline en Jenkins.
+- Cobertura de tests en capas de aplicación y dominio.
+
+--------------------------------------------------------------------------------
+9. GUÍA DE EJECUCIÓN RÁPIDA
+--------------------------------------------------------------------------------
+1. Iniciar Base de Datos:
+   $ docker start escu-mongodb
+
+2. Levantar Microservicios:
+   $ cd backend
+   $ python auth_service.py
+   $ python denuncia_service.py (en una nueva terminal)
+
+3. Ejecutar Pruebas:
+   $ pytest tests/
+
+--------------------------------------------------------------------------------
+10. CONCLUSIONES Y TRABAJO FUTURO
+--------------------------------------------------------------------------------
+ESCU Project demuestra que es posible construir sistemas altamente seguros y 
+mantenibles aplicando patrones de diseño avanzados. 
+
+Próximos Pasos (Hacia la versión final):
+- Implementación de cifrado de extremo a extremo en las descripciones.
+- Dashboard de analítica para visualización de focos de violencia.
+- Hardening de contenedores según guías OWASP.
+
+================================================================================
 
 ### Características del Sistema
 
