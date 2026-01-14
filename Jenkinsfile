@@ -23,6 +23,7 @@ pipeline {
             steps {
                 sh '''
                 . venv/bin/activate
+                export PYTHONPATH=$PYTHONPATH:backend
                 pytest
                 '''
             }
